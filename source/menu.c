@@ -31,19 +31,15 @@ void printOptionList(int cursor)
 {
     refreshScreen();
 
-    char *option_list[]      = {    "Full Atmosphere update (recommended)", \
-                                    "Update Atmosphere (ignoring .ini files)", \
-                                    "Update Hekate (for hekate / kosmos users)", \
+    char *option_list[]      = {    "Update Kefir", \
                                     "Update app", \
                                     "Reboot (reboot to payload)" };
 
     char *description_list[] = {    "Update everything for Atmosphere", \
-                                    "Update Atmosphere ignoring .ini files (if they exist)", \
-                                    "Update hekate with option to also update Atmosphere", \
                                     "Update app and removes old version", \
                                     "Reboots switch (recommended after updating)" };
 
-    SDL_Texture *textureArray[] = { ams_icon, ams_plus_icon, hekate_icon, app_icon, reboot_icon };
+    SDL_Texture *textureArray[] = { ams_icon, app_icon, reboot_icon };
 
     for (int i=0, nl=0; i < (CURSOR_LIST_MAX+1); i++, nl+=NEWLINE)
     {

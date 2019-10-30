@@ -4,7 +4,6 @@
 #define ROOT                    "/"
 #define APP_PATH                "/switch/atmosphere-updater/"
 #define AMS_OUTPUT              "/switch/atmosphere-updater/ams.zip"
-#define HEKATE_OUTPUT           "/switch/atmosphere-updater/hekate.zip"
 #define APP_OUTPUT              "/switch/atmosphere-updater/atmosphere-updater.nro"
 #define OLD_APP_PATH            "/switch/atmosphere-updater.nro"
 
