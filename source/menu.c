@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "Atmosphere Updater: 0.5.0"
+#define APP_VERSION "Kefir Updater: 0.5.0"
 
 void refreshScreen()
 {
@@ -31,12 +31,12 @@ void printOptionList(int cursor)
 {
     refreshScreen();
 
-    char *option_list[]      = {    "Update Kefir", \
-                                    "Update app", \
+    char *option_list[]      = {    "Update Atmosphere", \
+                                    "Update SXOS", \
                                     "Reboot (reboot to payload)" };
 
-    char *description_list[] = {    "Update everything for Atmosphere", \
-                                    "Update app and removes old version", \
+    char *description_list[] = {    "Update kefir on Atmosphere", \
+                                    "Update kefir on SXOS", \
                                     "Reboots switch (recommended after updating)" };
 
     SDL_Texture *textureArray[] = { ams_icon, app_icon, reboot_icon };
@@ -71,6 +71,49 @@ void popUpBox(TTF_Font *font, int x, int y, SDL_Colour colour, char *text)
 int yesNoBox(int mode, int x, int y, char *question)
 {
     printOptionList(mode);
+    popUpBox(fntMedium, x, y, SDL_GetColour(white), question);
+    // highlight box.
+    drawShape(SDL_GetColour(faint_blue), 380, 410, 175, 65);
+    drawShape(SDL_GetColour(faint_blue), 700, 410, 190, 65);
+    // option text.
+    drawButton(fntButtonBig, BUTTON_B, 410, 425, SDL_GetColour(white));
+    drawText(fntMedium, 455, 425, SDL_GetColour(white), "No");
+    drawButton(fntButtonBig, BUTTON_A, 725, 425, SDL_GetColour(white));
+    drawText(fntMedium, 770, 425, SDL_GetColour(white), "Yes");
+
+    updateRenderer();
+
+    int res = 0;
+    int touch_lock = OFF;
+    touchPosition touch;
+    u32 tch = 0;
+    u32 touch_count = hidTouchCount();
+
+    // check if the user is already touching the screen.
+    if (touch_count > 0) touch_lock = ON;
+
+    while (1)
+    {
+        hidScanInput();
+        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        hidTouchRead(&touch, tch);
+        touch_count = hidTouchCount();
+
+        if (touch_count == 0) touch_lock = OFF;
+
+        if (touch_count > 0 && touch_lock == OFF)
+            res = touch_yes_no_option(touch.px, touch.py);
+
+        if (kDown & KEY_A || res == YES)
+            return YES;
+
+        if (kDown & KEY_B || res == NO)
+            return NO;
+    }
+}
+
+int yesNoBox1(int x, int y, char *question)
+{
     popUpBox(fntMedium, x, y, SDL_GetColour(white), question);
     // highlight box.
     drawShape(SDL_GetColour(faint_blue), 380, 410, 175, 65);

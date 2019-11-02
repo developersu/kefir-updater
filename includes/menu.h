@@ -8,7 +8,7 @@
 #define HIGHLIGHT_BOX_MAX   70
 #define NEWLINE             110
 #define FIRST_LINE          130
-#define MAX_STRLEN          512
+#define MAX_STRLEN          200
 
 void refreshScreen(void);                                                   // clear screen, display background with title
 void printOptionList(int cursor);                                           // print list of options

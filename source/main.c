@@ -107,13 +107,14 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case UP_AMS:
-                if (yesNoBox(cursor, 390, 250, "Update Kefir?") == YES)
-                    update_ams_hekate(AMS_URL, AMS_OUTPUT, cursor);
+                if (yesNoBox(cursor, 390, 250, "Update kefir with Atmosphere?") == YES)
+                    update_atmo(AMS_URL, AMS_OUTPUT, cursor);
                 break;
 
-            case UP_APP:
-                if (yesNoBox(cursor, 390, 250, "Update App?") == YES)
-                    update_app();
+            case UP_SX:
+                if (yesNoBox(cursor, 390, 250, "Update kefir with SXOS?") == YES)
+                    //update_sxos(SXOS_URL, AMS_OUTPUT, cursor);
+                    update_atmo(SXOS_URL, AMS_OUTPUT, cursor);
                 break;
 
             case REBOOT_PAYLOAD:

@@ -128,7 +128,27 @@ int parseSearch(char *parse_string, char *filter, char* new_string)
     return 1;
 }
 
-int update_ams_hekate(char *url, char *output, int mode)
+// int update_atmo(char *url, char *output, int mode)
+// {
+    // if (!downloadFile(url, TEMP_FILE, ON))
+    // {
+        // if (!downloadFile(AMS_URL, output, OFF))
+        // {
+            // unzip(output, mode);
+
+            // check if an update.bin is present, remove if so.
+                // if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
+                    // reboot_payload("/atmosphere/reboot_payload.bin");
+            // return 0;
+
+        // }
+        // return 1;
+
+    // }
+    // return 1;
+// }
+
+int update_atmo(char *url, char *output, int mode)
 {
 
     if (!downloadFile(url, TEMP_FILE, ON))
@@ -140,7 +160,6 @@ int update_ams_hekate(char *url, char *output, int mode)
             {
                 unzip(output, mode);
 
-                // check if an update.bin is present, remove if so.
                 return 0;
             }
             return 1;
@@ -149,6 +168,27 @@ int update_ams_hekate(char *url, char *output, int mode)
     }
     return 1;
 }
+
+
+// int update_sxos(char *url, char *output, int mode)
+// {
+
+    // if (!downloadFile(url, TEMP_FILE, ON))
+    // {
+        // if (!downloadFile(SXOS_URL, output, OFF))
+        // {
+            // unzip(output, mode);
+
+            // check if an update.bin is present, remove if so.
+            // errorBox(400, 250, "      Update complete!\nRestart app to take effect");
+            // return 0;
+
+        // }
+        // return 1;
+
+    // }
+    // return 1;
+// }
 
 void update_app()
 {
