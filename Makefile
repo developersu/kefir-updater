@@ -37,7 +37,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-APP_TITLE   := Kefir-Updater
+APP_TITLE   := Kefir Updater
 APP_AUTHOR  := TotalJustice, forked by xHR
 APP_VERSION := 0.5.0
 

@@ -13,9 +13,9 @@ static SDL_Window *main_window;
 static SDL_Renderer *main_renderer;
 
 SDL_Colour colours[] = {
-    { 255, 255, 255 },          //white
-    { 140, 140, 140, 255 },     //grey
     { 0, 0, 0 },                //black
+    { 97, 115, 255 },           //faint blue
+    { 255, 255, 255 },          //white
     { 255, 192, 203 },          //pink
     { 255, 165, 0 },            //orange
     { 255, 255, 0 },            //yellow
@@ -27,8 +27,8 @@ SDL_Colour colours[] = {
     { 28, 33, 73 },             //dark blue
     { 160, 32, 240 },           //purple
     { 81, 81, 81 },             //dark grey
-    { 131, 177, 218 },          //jordy blue
-    { 97, 115, 255 }            //faint blue
+    { 124, 124, 124 },          //not so dark grey
+    { 160, 159, 159, 255 }      //grey
     };
 
 SDL_Colour SDL_GetColour(int colour_option)

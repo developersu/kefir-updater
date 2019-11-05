@@ -2,17 +2,23 @@
 #include <string.h>
 #include <switch.h>
 
+#pragma once
+
 #include "util.h"
 #include "menu.h"
 #include "unzip.h"
 #include "download.h"
 #include "reboot_payload.h"
+// #include "../types.h"
+// #include "../kernel/event.h"
+// #include "../services/acc.h"
+// #include "../sf/service.h"
 
 #define TEMP_FILE               "/switch/atmosphere-updater/temp"
 #define FILTER_STRING           "browser_download_url\":\""
 
 char g_sysVersion[50];
-char g_amsVersion[50];
+// char g_amsVersion[50];
 
 
 char *getSysVersion()
@@ -20,10 +26,10 @@ char *getSysVersion()
     return g_sysVersion;
 }
 
-char *getAmsVersion()
-{
-    return g_amsVersion;
-}
+// char *getAmsVersion()
+// {
+    // return g_amsVersion;
+// }
 
 void writeSysVersion()
 {
@@ -41,7 +47,7 @@ void writeSysVersion()
     snprintf(g_sysVersion, sizeof(g_sysVersion), "Firmware Ver: %s", sysVersionBuffer);
 }
 
-void writeAmsVersion()
+/*void writeAmsVersion()
 {
 	Result ret = 0;
 	u64 ver;
@@ -71,7 +77,7 @@ void writeAmsVersion()
 
     // write string + ams version to global variable.
     snprintf(g_amsVersion, sizeof(g_amsVersion), "Atmosphere Ver: %s", amsVersionNum);
-}
+}*/
 
 void copyFile(char *src, char *dest)
 {
@@ -92,104 +98,62 @@ void copyFile(char *src, char *dest)
     fclose(newfile);
 }
 
-int parseSearch(char *parse_string, char *filter, char* new_string)
-{
-    FILE *fp = fopen(parse_string, "r");
+void remove_dir(char *dir_name){
     
-    if (fp)
-    {
-        char c;
-        while ((c = fgetc(fp)) != EOF)
-        {
-            if (c == *filter)
-            {
-                for (int i = 0, len = strlen(filter) - 1; c == filter[i]; i++)
-                {
-                    c = fgetc(fp);
-                    if (i == len)
-                    {
-                        for (int j = 0; c != '\"'; j++)
-                        {
-                            new_string[j] = c;
-                            new_string[j+1] = '\0';
-                            c = fgetc(fp);
-                        }
-                        fclose(fp);
-                        remove(parse_string);
-                        return 0;
-                    }
-                }
-            }
-        }
-    }
-
-    errorBox(350, 250, "Failed to find parse url!");
-    fclose(fp);
-    return 1;
 }
-
-// int update_atmo(char *url, char *output, int mode)
-// {
-    // if (!downloadFile(url, TEMP_FILE, ON))
-    // {
-        // if (!downloadFile(AMS_URL, output, OFF))
-        // {
-            // unzip(output, mode);
-
-            // check if an update.bin is present, remove if so.
-                // if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
-                    // reboot_payload("/atmosphere/reboot_payload.bin");
-            // return 0;
-
-        // }
-        // return 1;
-
-    // }
-    // return 1;
-// }
 
 int update_atmo(char *url, char *output, int mode)
 {
-
-    if (!downloadFile(url, TEMP_FILE, ON))
+    if (!downloadFile(AMS_URL, output, OFF))
     {
-        char new_url[MAX_STRLEN];
-        if (!parseSearch(TEMP_FILE, FILTER_STRING, new_url))
-        {
-            if (!downloadFile(new_url, output, OFF))
-            {
-                unzip(output, mode);
+        unzip(output, mode);  
+            remove_dir("/atmosphere/titles/420000000000000E");
+            if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
+                reboot_payload("/atmosphere/reboot_payload.bin");
+        return 0;
 
-                return 0;
-            }
-            return 1;
-        }
-        return 1;
     }
+
+    return 1;
+    
+}
+
+int update_sxos(char *url, char *output, int mode)
+{   
+
+    if (!downloadFile(SXOS_URL, output, OFF))
+    {
+        unzip(output, mode);
+
+            if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
+                reboot_payload("/atmosphere/reboot_payload.bin");
+        return 0;
+
+    }
+
     return 1;
 }
 
 
-// int update_sxos(char *url, char *output, int mode)
-// {
 
-    // if (!downloadFile(url, TEMP_FILE, ON))
-    // {
-        // if (!downloadFile(SXOS_URL, output, OFF))
-        // {
-            // unzip(output, mode);
+/*void remove_old()
+{
+    FS_RemoveDir(fs, "/atmosphere/titles/4200000000000010");
+    FS_RemoveDir(fs, "/atmosphere/titles/420000000000000E");
+    FS_RemoveDir(fs, "/atmosphere/titles/010000000000100B");
+    FS_RemoveDir(fs, "/atmosphere/titles/01FF415446660000");
+    FS_RemoveDir(fs, "/atmosphere/titles/0100000000000352");
+    FS_RemoveDir(fs, "/atmosphere/titles/00FF747765616BFF");
+    remove("/atmosphere/kips/fs_mitm.kip");
+    remove("/atmosphere/kips/ldn_mitm.kip");
+    remove("/atmosphere/kips/loader.kip");
+    remove("/atmosphere/kips/pm.kip");
+    remove("/atmosphere/kips/sm.kip");
+    remove("/atmosphere/kips/ams_mitm.kip");
+    remove("/atmosphere/flags/hbl_cal_read.flag");
+}*/
 
-            // check if an update.bin is present, remove if so.
-            // errorBox(400, 250, "      Update complete!\nRestart app to take effect");
-            // return 0;
-
-        // }
-        // return 1;
-
-    // }
-    // return 1;
-// }
-
+/*
 void update_app()
 {
     // download new nro as a tempfile.
@@ -205,3 +169,4 @@ void update_app()
         errorBox(400, 250, "      Update complete!\nRestart app to take effect");
     }
 }
+*/

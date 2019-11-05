@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
     // write sys / ams version to char*.
     writeSysVersion();
-    writeAmsVersion();
+    //writeAmsVersion();
 
     // set the cursor position to 0.
     short cursor = 0;
@@ -107,18 +107,18 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case UP_AMS:
-                if (yesNoBox(cursor, 390, 250, "Update kefir with Atmosphere?") == YES)
+                if (yesNoBox(cursor, 355, 250, "Update kefir with Atmosphere?") == YES)
                     update_atmo(AMS_URL, AMS_OUTPUT, cursor);
                 break;
 
             case UP_SX:
-                if (yesNoBox(cursor, 390, 250, "Update kefir with SXOS?") == YES)
+                if (yesNoBox(cursor, 355, 250, "Update kefir with SXOS?") == YES)
                     //update_sxos(SXOS_URL, AMS_OUTPUT, cursor);
                     update_atmo(SXOS_URL, AMS_OUTPUT, cursor);
                 break;
 
             case REBOOT_PAYLOAD:
-                if (yesNoBox(cursor, 390, 250, "Reboot to Payload?") == YES)
+                if (yesNoBox(cursor, 355, 250, "Reboot to Payload?") == YES)
                     reboot_payload("/atmosphere/reboot_payload.bin");
                 break;
             }
