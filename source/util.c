@@ -2,7 +2,6 @@
 #include <string.h>
 #include <switch.h>
 #include <dirent.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
