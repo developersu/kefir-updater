@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <switch.h>
+#include <dirent.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #pragma once
 
@@ -97,9 +102,50 @@ void copyFile(char *src, char *dest)
     fclose(srcfile);
     fclose(newfile);
 }
+// Check if it's dir on 'path' 
+int is_dir(const char* path){
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISDIR(path_stat.st_mode);
+}
 
-void remove_dir(char *dir_name){
+// Remove entry
+int remove_entry(const char* dir_name){
+    if (! is_dir(dir_name))
+        return remove(dir_name);
+
+    DIR *dir;
+    dir = opendir(dir_name);
+    if (! dir)
+        return 1;
+
+    size_t dSz = strlen(dir_name);
+    struct dirent *s_dirent;
+
+    char* full_name;
+
+    while ((s_dirent = readdir(dir)) != NULL){
+        if ((strcmp(s_dirent->d_name, ".") == 0) || (strcmp(s_dirent->d_name, "..") == 0))
+            continue;
+        full_name = malloc(dSz + strlen(s_dirent->d_name) + 2); // '/'+'\0'
+
+        strcpy(full_name, dir_name);
+        strcat(full_name, "/");
+        strcat(full_name, s_dirent->d_name);    
+
+        if (is_dir(full_name)){
+            remove_entry(full_name);
+        }
+        remove(full_name);      // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
+
+        free(full_name);
+    }
+
+    remove(dir_name);           // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
+
+    closedir(dir);
     
+    return 0;
 }
 
 int update_atmo(char *url, char *output, int mode)
@@ -107,7 +153,7 @@ int update_atmo(char *url, char *output, int mode)
     if (!downloadFile(AMS_URL, output, OFF))
     {
         unzip(output, mode);  
-            remove_dir("/atmosphere/titles/420000000000000E");
+            remove_entry("/atmosphere/titles/420000000000000E");
             if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
                 reboot_payload("/atmosphere/reboot_payload.bin");
         return 0;
