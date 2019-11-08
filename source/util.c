@@ -48,7 +48,7 @@ void writeSysVersion()
 
     char sysVersionBuffer[20];
 	snprintf(sysVersionBuffer, 20, "%u.%u.%u", ver.major, ver.minor, ver.micro);
-    snprintf(g_sysVersion, sizeof(g_sysVersion), "Firmware Ver: %s", sysVersionBuffer);
+    snprintf(g_sysVersion, sizeof(g_sysVersion), "Версия системного ПО: %s", sysVersionBuffer);
 }
 
 /*void writeAmsVersion()
@@ -110,13 +110,11 @@ int is_dir(const char* path){
 
 // Remove entry
 int remove_entry(const char* dir_name){
-    if (! is_dir(dir_name))
+    if (is_dir(dir_name)!=0)
         return remove(dir_name);
 
     DIR *dir;
     dir = opendir(dir_name);
-    if (! dir)
-        return 1;
 
     size_t dSz = strlen(dir_name);
     struct dirent *s_dirent;
@@ -140,24 +138,26 @@ int remove_entry(const char* dir_name){
         free(full_name);
     }
 
-    remove(dir_name);           // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
 
     closedir(dir);
+    remove(dir_name);           // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
     
     return 0;
 }
 
 int update_atmo(char *url, char *output, int mode)
 {
-    if (!downloadFile(AMS_URL, output, OFF))
+    remove_old();
+    errorBox(400, 250, "      Update complete!\nRestart app to take effect");
+
+    /*if (!downloadFile(AMS_URL, output, OFF))
     {
         unzip(output, mode);  
-            remove_entry("/atmosphere/titles/420000000000000E");
             if (yesNoBox1(390, 250, "Reboot to Payload?") == YES)
                 reboot_payload("/atmosphere/reboot_payload.bin");
         return 0;
 
-    }
+    }*/
 
     return 1;
     
@@ -181,10 +181,11 @@ int update_sxos(char *url, char *output, int mode)
 
 
 
-/*void remove_old()
+void remove_old()
 {
-    FS_RemoveDir(fs, "/atmosphere/titles/4200000000000010");
-    FS_RemoveDir(fs, "/atmosphere/titles/420000000000000E");
+    remove_entry("/atmosphere/titles/4200000000000010");
+    remove_entry("/atmosphere/titles/00FF0012656180FF");
+    /*FS_RemoveDir(fs, "/atmosphere/titles/420000000000000E");
     FS_RemoveDir(fs, "/atmosphere/titles/010000000000100B");
     FS_RemoveDir(fs, "/atmosphere/titles/01FF415446660000");
     FS_RemoveDir(fs, "/atmosphere/titles/0100000000000352");
@@ -195,8 +196,8 @@ int update_sxos(char *url, char *output, int mode)
     remove("/atmosphere/kips/pm.kip");
     remove("/atmosphere/kips/sm.kip");
     remove("/atmosphere/kips/ams_mitm.kip");
-    remove("/atmosphere/flags/hbl_cal_read.flag");
-}*/
+    remove("/atmosphere/flags/hbl_cal_read.flag");*/
+}
 
 /*
 void update_app()

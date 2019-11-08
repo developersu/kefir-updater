@@ -22,5 +22,6 @@ int parseSearch(char *phare_string, char *filter, char* new_string);    // hacky
 int update_atmo(char *url, char *output, int mode);                     // update either ams or hekate
 int update_sxos(char *url, char *output, int mode);                     // update either ams or hekate
 void update_app();                                                      // update the app
+void remove_old();
 
 #endif

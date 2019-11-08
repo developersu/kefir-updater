@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "Kefir Updater: 0.5.0"
+#define APP_VERSION "Kefir Updater: 0.6.0"
 
 void refreshScreen()
 {
@@ -22,22 +22,22 @@ void refreshScreen()
 
     //drawText(fntMedium, 120, 225, SDL_GetColour(black), "Menu Here"); // menu options
     drawButton(fntButton, BUTTON_A, 970, 672, SDL_GetColour(black));
-    drawText(fntSmall, 1010, 675, SDL_GetColour(black), "Select");
+    drawText(fntSmall, 1010, 675, SDL_GetColour(black), "Выбрать");
     drawButton(fntButton, BUTTON_PLUS, 1145, 672, SDL_GetColour(black));
-    drawText(fntSmall, 1185, 675, SDL_GetColour(black), "Exit");
+    drawText(fntSmall, 1185, 675, SDL_GetColour(black), "Выход");
 }
 
 void printOptionList(int cursor)
 {
     refreshScreen();
 
-    char *option_list[]      = {    "Update Atmosphere", \
-                                    "Update SXOS", \
-                                    "Reboot (reboot to payload)" };
+    char *option_list[]      = {    "Обновить Atmosphere", \
+                                    "Обновить SXOS", \
+                                    "Перезагрузиться в прошивку" };
 
-    char *description_list[] = {    "Update kefir on Atmosphere", \
-                                    "Update kefir on SXOS", \
-                                    "Reboots switch (recommended after updating)" };
+    char *description_list[] = {    "Обновить kefir на Atmosphere", \
+                                    "Обновить kefir на SXOS", \
+                                    "Перезагрузить консоль" };
 
     SDL_Texture *textureArray[] = { ams_icon, app_icon, reboot_icon };
 
@@ -120,9 +120,9 @@ int yesNoBox1(int x, int y, char *question)
     drawShape(SDL_GetColour(dark_grey), 705, 410, 195, 65);
     // option text.
     drawButton(fntButtonBig, BUTTON_B, 415, 425, SDL_GetColour(grey));
-    drawText(fntMedium, 460, 425, SDL_GetColour(grey), "No");
+    drawText(fntMedium, 460, 425, SDL_GetColour(grey), "Нет");
     drawButton(fntButtonBig, BUTTON_A, 725, 425, SDL_GetColour(grey));
-    drawText(fntMedium, 770, 425, SDL_GetColour(grey), "Yes");
+    drawText(fntMedium, 770, 425, SDL_GetColour(grey), "Да");
 
     updateRenderer();
 

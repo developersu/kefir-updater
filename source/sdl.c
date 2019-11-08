@@ -69,7 +69,7 @@ void imageLoadMem(SDL_Texture **texture, void *data, int size)
 
 void drawText(TTF_Font *font, int x, int y, SDL_Color colour, const char *text)
 {
-    SDL_Surface *Surface = TTF_RenderText_Blended_Wrapped(font, text, colour, 1280);
+    SDL_Surface *Surface = TTF_RenderUTF8_Blended_Wrapped(font, text, colour, 1280);
     SDL_Texture *Tex = SDL_CreateTextureFromSurface(main_renderer, Surface);
     SDL_Rect pos = { pos.x = x, pos.y = y, pos.w = Surface ->w, pos.h = Surface->h };
 
