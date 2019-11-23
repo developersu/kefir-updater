@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #pragma once
 
@@ -13,10 +14,6 @@
 #include "unzip.h"
 #include "download.h"
 #include "reboot_payload.h"
-// #include "../types.h"
-// #include "../kernel/event.h"
-// #include "../services/acc.h"
-// #include "../sf/service.h"
 
 #define TEMP_FILE               "/switch/atmosphere-updater/temp"
 #define FILTER_STRING           "browser_download_url\":\""
@@ -108,17 +105,18 @@ int is_dir(const char* path){
     return S_ISDIR(path_stat.st_mode);
 }
 
-// Remove entry
+// Remove all the shit. Please note that there should be no '/' char in the end. Otherwise update this snippet.
 int remove_entry(const char* dir_name){
-    if (is_dir(dir_name)!=0)
-        return remove(dir_name);
+    if (! is_dir(dir_name))
+        return unlink(dir_name);
 
-    DIR *dir;
-    dir = opendir(dir_name);
+    DIR *dir = opendir(dir_name);
+
+    if (dir == NULL)
+        return 1;
 
     size_t dSz = strlen(dir_name);
     struct dirent *s_dirent;
-
     char* full_name;
 
     while ((s_dirent = readdir(dir)) != NULL){
@@ -129,20 +127,18 @@ int remove_entry(const char* dir_name){
         strcpy(full_name, dir_name);
         strcat(full_name, "/");
         strcat(full_name, s_dirent->d_name);    
-
-        if (is_dir(full_name)){
-            remove_entry(full_name);
-        }
-        remove(full_name);      // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
+        
+        if (s_dirent->d_type == DT_DIR)
+            remove_entry(full_name);        // NOTE: Handle returning value
+        else
+            unlink(full_name);      // NOTE: Add validation
 
         free(full_name);
     }
 
-
     closedir(dir);
-    remove(dir_name);           // NOTE: Not validating returning value; could be -1; TODO: Add validation/notification/log-reporting
-    
-    return 0;
+
+    return rmdir(dir_name);           // NOTE: Add validation
 }
 
 int update_atmo(char *url, char *output, int mode)

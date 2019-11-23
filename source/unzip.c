@@ -60,7 +60,6 @@ int unzip(const char *output, int mode)
 
         updateRenderer();
 
-        jump_to_end: // goto
         unzCloseCurrentFile(zfile);
         unzGoToNextFile(zfile);
     }
